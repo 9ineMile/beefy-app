@@ -2,6 +2,10 @@ const styles = (theme) => ({
   container: {
     display: 'flex',
   },
+  loader: {
+    height: '40px',
+    width: '40px'
+  },
   texts: {
     marginLeft: '20px',
   },

@@ -4,6 +4,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import LazyLoad from 'react-lazyload';
 
 import styles from './styles';
 
@@ -14,9 +15,11 @@ const PoolTitle = ({ name, logo, description, url }) => {
 
   return (
     <Grid item xs={3} className={classes.container}>
-      <Avatar alt={name} variant='square'
-              imgProps={{ style: { objectFit: 'contain' } }}
-              src={require(`../../../../../images/${logo}`)} />
+      <LazyLoad offset={400} className={classes.loader}>
+        <Avatar alt={name} variant='square'
+                imgProps={{ style: { objectFit: 'contain' } }}
+                src={require(`../../../../../images/${logo}`)} />
+      </LazyLoad>
       <div className={classes.texts}>
         <Typography className={classes.title} variant='body2' gutterBottom>
           {name}
