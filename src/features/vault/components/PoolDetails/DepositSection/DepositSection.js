@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import { useSnackbar } from 'notistack';
 
+import { status } from '../../../../common';
 import CustomOutlinedInput from 'components/CustomOutlinedInput/CustomOutlinedInput';
 import { useFetchDeposit, useFetchApproval } from 'features/vault/redux/hooks';
 import CustomSlider from 'components/CustomSlider/CustomSlider';
@@ -51,7 +52,7 @@ const DepositSection = ({ pool, index, balanceSingle }) => {
   };
 
   const onDeposit = isAll => {
-    if (pool.depositsPaused) {
+    if (pool.depositsPaused || pool.state >= status.ENDED) {
       console.error('Deposits paused!');
       return;
     }
@@ -116,28 +117,26 @@ const DepositSection = ({ pool, index, balanceSingle }) => {
     });
   };
 
-  const getVaultState = (status, paused) => {
-    let display = false
-    let cont = null
-
-    if(status === 'eol') {
-      display = true;
+  const getVaultState = (state, paused) => {
+    let display = true;
+    let cont    = null;
+    if(state >= status.ENDED) {
       cont = <div className={classes.showDetailButtonCon}>
         <div className={classes.showRetiredMsg}>{t('Vault-DepositsRetiredMsg')}</div>
       </div>
+    } else if(paused) {
+      cont = <div className={classes.showDetailButtonCon}>
+        <div className={classes.showPausedMsg}>{t('Vault-DepositsPausedMsg')}</div>
+      </div>
     } else {
-      if(paused) {
-        display = true;
-        cont = <div className={classes.showDetailButtonCon}>
-          <div className={classes.showPausedMsg}>{t('Vault-DepositsPausedMsg')}</div>
-        </div>
-      }
+      display = false;
     }
 
-    return {display:display, content: cont}
+    return {display:display, content: cont, paused: paused}
   }
 
-  const vaultState = getVaultState(pool.status, pool.depositsPaused);
+  const paused = pool.depositsPaused || pool.status >= status.ENDED;
+  const vaultState = getVaultState(pool.status, paused);
 
   return (
     <Grid item xs={12} md={shouldHideFromHarvest(pool.id) ? 6 : 5} className={classes.sliderDetailContainer}>
@@ -159,7 +158,7 @@ const DepositSection = ({ pool, index, balanceSingle }) => {
             <Button
               className={`${classes.showDetailButton} ${classes.showDetailButtonContained}`}
               onClick={onApproval}
-              disabled={pool.depositsPaused || fetchApprovalPending[index]}
+              disabled={vaultState.paused || fetchApprovalPending[index]}
             >
               {fetchApprovalPending[index]
                 ? `${t('Vault-Approving')}`
@@ -172,7 +171,7 @@ const DepositSection = ({ pool, index, balanceSingle }) => {
               className={`${classes.showDetailButton} ${classes.showDetailButtonOutlined}`}
               color="primary"
               disabled={
-                pool.depositsPaused ||
+                vaultState.paused ||
                 !Boolean(depositBalance.amount) ||
                 fetchDepositPending[index] ||
                 new BigNumber(depositBalance.amount).toNumber() > balanceSingle.toNumber()
@@ -185,7 +184,7 @@ const DepositSection = ({ pool, index, balanceSingle }) => {
               <Button
                 className={`${classes.showDetailButton} ${classes.showDetailButtonContained}`}
                 disabled={
-                  pool.depositsPaused ||
+                  vaultState.paused ||
                   fetchDepositPending[index] ||
                   new BigNumber(depositBalance.amount).toNumber() > balanceSingle.toNumber()
                 }

@@ -1,6 +1,10 @@
-import { pools } from '../../configure';
+import { pools as configPools } from '../../configure';
+import { status } from '../../common';
 
 const tokens = {};
+
+// Filter disabled pools so they don't get anywhere near the user.
+const pools = configPools.filter((pool) => pool.status !== status.DISABLED);
 
 pools.forEach(({ token, tokenAddress, earnedToken, earnedTokenAddress }) => {
   tokens[token] = {

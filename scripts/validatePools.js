@@ -1,6 +1,7 @@
 // To run: yarn validate
 
 import { pools } from '../src/features/configure/pools.js';
+import { status } from '../src/features/common/constants.js';
 
 let valid = true;
 const uniquePoolId = new Set();
@@ -45,7 +46,7 @@ pools.forEach(pool => {
     messages.push(`Warning: ${pool.id} : Pool oracleId duplicated: ${pool.oracleId}`);
   }
 
-  if (pool.status === 'active') {
+  if (pool.status === status.ACTIVE) {
     activePools++;
   }
 

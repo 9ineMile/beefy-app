@@ -6,27 +6,50 @@ import { useTranslation } from 'react-i18next';
 import BigNumber from 'bignumber.js';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { status } from '../../../common';
 import { formatApy, formatTvl, calcDaily } from 'features/helpers/format';
 import { byDecimals } from 'features/helpers/bignumber';
 import styles from './styles';
-import PoolPaused from './PoolPaused/PoolPaused';
+import PoolStatus from './PoolStatus/PoolStatus';
 import PoolTitle from './PoolTitle/PoolTitle';
 import LabeledStat from './LabeledStat/LabeledStat';
 import SummaryActions from './SummaryActions/SummaryActions';
 
 const useStyles = makeStyles(styles);
 
+
 const PoolSummary = ({ pool, toggleCard, isOpen, balanceSingle, sharesBalance, apy }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-  const vaultStateTitle = (status, paused) => {
-    let state = status === 'eol' ? t('Vault-DepositsRetiredTitle') : (paused ? t('Vault-DepositsPausedTitle') : null)
-    return state === null ? '' : <PoolPaused message={t(state)} />
+
+   const getPoolStatus = (pool) => {
+    if(pool.status >= status.ENDED)
+      return t('Vault-DepositsRetiredTitle');
+    if(pool.depositsPaused === true)
+      return t('Vault-DepositsPausedTitle');
+    if(pool.experimental === true)
+      return t('Vault-ExperimentalTitle');
+    return null;
+  };
+
+  const getPoolStyle = (pool) => {
+    if(pool.status >= status.ENDED)
+      return classes.detailsRetired;
+    if(pool.depositsPaused === true)
+      return classes.detailsPaused;
+    if(pool.experimental === true)
+      return classes.detailsExperimental;
+    return ''
   }
+
+  const vaultStateTitle = (state) => {
+    return state === null ? '' : <PoolStatus message={t(state)} />
+  }
+
 
   return (
     <AccordionSummary
-      className={pool.status === 'eol' ? classes.detailsRetired : (pool.depositsPaused ? classes.detailsPaused : classes.details)}
+      className={`${getPoolStyle(pool)} ${classes.details}`}
       style={{ justifyContent: 'space-between' }}
       onClick={event => {
         event.stopPropagation();
@@ -40,7 +63,7 @@ const PoolSummary = ({ pool, toggleCard, isOpen, balanceSingle, sharesBalance, a
         spacing={1}
         style={{ paddingTop: '16px', paddingBottom: '16px' }}
       >
-        {vaultStateTitle(pool.status, pool.depositsPaused)}
+        {vaultStateTitle(getPoolStatus(pool))}
         <PoolTitle
           name={pool.name}
           logo={pool.logo}

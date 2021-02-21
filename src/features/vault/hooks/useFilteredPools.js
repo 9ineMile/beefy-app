@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { status } from '../../common';
 import useFilterStorage from '../../home/hooks/useFiltersStorage';
 
 const DEFAULT = {
+  hideExperimental: true,
   hideDecomissioned: true,
   hideZeroBalances: false,
   hideZeroVaultBalances: false,
@@ -42,6 +44,10 @@ const useFilteredPools = (pools, tokens) => {
       newPools = [...pools];
     }
 
+    if (filters.hideExperimental) {
+      newPools = hideExperimental(newPools);
+    }
+
     if (filters.hideDecomissioned) {
       newPools = hideDecomissioned(newPools);
     }
@@ -54,7 +60,13 @@ const useFilteredPools = (pools, tokens) => {
 
 function hideDecomissioned(pools) {
   return pools.filter(pool => {
-    return pool.status !== 'eol' && pool.status !== 'refund';
+    return pool.status < status.ENDED;
+  });
+}
+
+function hideExperimental(pools) {
+  return pools.filter(pool => {
+    return pool.experimental !== true;
   });
 }
 

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import FormControl from '@material-ui/core/FormControl';
 
+import { status } from '../../../../common';
 import Button from 'components/CustomButtons/Button.js';
 import CustomOutlinedInput from 'components/CustomOutlinedInput/CustomOutlinedInput';
 import CustomSlider from 'components/CustomSlider/CustomSlider';
@@ -125,7 +126,7 @@ const WithdrawSection = ({ pool, index, sharesBalance }) => {
         onChange={onSliderChange}
       />
       <div className={classes.showDetailButtonCon}>
-        {pool.status === 'refund' ? (
+        {pool.status === status.REFUND ? (
           <RefundButtons
             tokenAddress={pool.earnedTokenAddress}
             refundAddress={pool.refundContractAddress}

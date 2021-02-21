@@ -49,24 +49,24 @@ const Filters = ({
 
   return (
     <Grid container spacing={2} className={classes.container}>
-      <Grid item xs={4}>
+      <Grid item xs={6} lg={3}>
         <FormControl>
           <FormControlLabel
             className={classes.label}
             control={
               <Checkbox
-                checked={filters.hideZeroBalances}
-                onChange={() => toggleFilter('hideZeroBalances')}
+                checked={!filters.hideExperimental}
+                onChange={() => toggleFilter('hideExperimental')}
                 color="primary"
               />
             }
             // TODO: translate labels
-            label={t('Hide-Zero-Balances')}
+            label={t('Experimental-Vaults')}
           />
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={6} lg={3}>
         <FormControl>
           <FormControlLabel
             className={classes.label}
@@ -83,7 +83,24 @@ const Filters = ({
         </FormControl>
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={6} lg={3}>
+        <FormControl>
+          <FormControlLabel
+            className={classes.label}
+            control={
+              <Checkbox
+                checked={filters.hideZeroBalances}
+                onChange={() => toggleFilter('hideZeroBalances')}
+                color="primary"
+              />
+            }
+            // TODO: translate labels
+            label={t('Hide-Zero-Balances')}
+          />
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={6} lg={3}>
         <FormControl>
           <FormControlLabel
             className={classes.label}

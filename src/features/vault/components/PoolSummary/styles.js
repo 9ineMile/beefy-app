@@ -5,14 +5,13 @@ const styles = (theme) => ({
     background: theme.palette.background.primary,
   },
   detailsPaused: {
-    display: 'flex',
-    alignItems: 'center',
     background: theme.palette.background.paused,
   },
   detailsRetired: {
-    display: 'flex',
-    alignItems: 'center',
     background: theme.palette.background.retired,
+  },
+  detailsExperimental: {
+    background: theme.palette.background.experimental,
   },
 });
 

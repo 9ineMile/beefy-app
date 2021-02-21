@@ -11,6 +11,7 @@ const createTheme = (isNightMode) => createMuiTheme({
       dark: isNightMode ? '#2B2A3D' : '#999',
       paused: isNightMode ? '#2B2A5A' : '#FCE57E',
       retired: isNightMode ? '#d32f2f' : '#e57373',
+      experimental: isNightMode ? '#76765B' : '#e5df73',
       hover: isNightMode ? '#2B2A3D' : '#EFE6DC',
       border: isNightMode ? '#2B2A3D' : '#DED9D5',
     },

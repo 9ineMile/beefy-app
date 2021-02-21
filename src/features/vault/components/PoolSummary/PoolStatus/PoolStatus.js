@@ -5,9 +5,9 @@ import styles from './styles';
 
 const useStyles = makeStyles(styles);
 
-const PoolPaused = ({ message }) => {
+const PoolStatus = ({ message }) => {
   const classes = useStyles();
-
+  if(!message) return null;
   return (
       <div className={classes.container}>
         <div className={classes.texts}>{message}</div>
@@ -15,4 +15,4 @@ const PoolPaused = ({ message }) => {
   );
 };
 
-export default memo(PoolPaused);
+export default memo(PoolStatus);

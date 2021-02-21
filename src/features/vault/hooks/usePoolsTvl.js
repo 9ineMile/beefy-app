@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { status } from '../../common';
+
 const usePoolsTvl = pools => {
   const [poolsTvl, setPoolsTvl] = useState(0);
 
@@ -12,7 +14,7 @@ const usePoolsTvl = pools => {
     };
 
     pools
-      .filter(p => p.status === 'active')
+      .filter(p => p.status === status.ACTIVE)
       .filter(isUniqueEarnContract)
       .forEach(({ tvl, oraclePrice }) => {
         globalTvl += tvl * oraclePrice;
